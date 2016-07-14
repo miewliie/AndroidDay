@@ -1,8 +1,5 @@
 local.properties
-
- .gradle/
-        .idea/libraries/
-        .idea/workspace.xml
-        AYPQuiz.iml
-        app/app.iml
-        build/
+.idea
+*.iml
+.gradle
+.build/
