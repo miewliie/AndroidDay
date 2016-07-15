@@ -10,4 +10,5 @@
     <string name="question_2_nile">Rawin is happy ?</string>
     <string name="question_3_nile">2 + 2 = 5 ?</string>
     <string name="question_4_nile">Mars does not have Moon ?</string>
+    <string name="previous_button">Previous</string>
 </resources>
