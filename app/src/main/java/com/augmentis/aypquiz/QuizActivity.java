@@ -29,7 +29,8 @@ public class QuizActivity extends AppCompatActivity {
 
 
     private static final String TAG = "AYPQUIZ";
-    private static final String INDEX = "INDEx";
+    private static final String INDEX = "INDEX";
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -77,9 +78,8 @@ public class QuizActivity extends AppCompatActivity {
         nextButton = (Button) findViewById(R.id.next_button);
         previousButton = (Button) findViewById(R.id.previous_button);
         questionText = (TextView) findViewById(R.id.text_question);
+
         questionText.setText(question[currentIndex].getQuestionId());
-
-
 
         if(savedInstanceState != null){
             currentIndex = savedInstanceState.getInt(INDEX, 0);
