@@ -1,5 +1,7 @@
 package com.augmentis.aypquiz;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,11 +12,13 @@ import android.widget.Toast;
 
 public class QuizActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CHEATED = 269 ;
     Button trueButton;
     Button falseButton;
     Button previousButton;
     Button nextButton;
     TextView questionText;
+    Button cheatButton;
 
 
     Question[] question = new Question[]{
@@ -30,6 +34,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private static final String TAG = "AYPQUIZ";
     private static final String INDEX = "INDEX";
+    private boolean isCheater;
 
     @Override
     protected void onStop() {
@@ -69,7 +74,7 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
@@ -78,6 +83,7 @@ public class QuizActivity extends AppCompatActivity {
         nextButton = (Button) findViewById(R.id.next_button);
         previousButton = (Button) findViewById(R.id.previous_button);
         questionText = (TextView) findViewById(R.id.text_question);
+        cheatButton = (Button) findViewById(R.id.cheat_button);
 
         questionText.setText(question[currentIndex].getQuestionId());
 
@@ -86,6 +92,8 @@ public class QuizActivity extends AppCompatActivity {
         }else {
             currentIndex = 0;
         }
+
+        resetCheater();
         updateQuestion();
 
 
@@ -111,7 +119,8 @@ public class QuizActivity extends AppCompatActivity {
                 currentIndex++;
                 if(currentIndex == question.length) currentIndex = 0;
 
-                    updateQuestion();
+                resetCheater();
+                updateQuestion();
 
 //                if(currentIndex < (question.length - 1)) { //This function is also work na ka
 //                    currentIndex ++;
@@ -127,27 +136,77 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(currentIndex == 0) {
-                    currentIndex   = question.length - 1;
-                }else {
-                    currentIndex --;
-                }
-                questionText.setText(question[currentIndex].getQuestionId());
-            }
+//                if(currentIndex == 0) {
+//                    currentIndex   = question.length - 1;
+//                }else {
+//                    currentIndex --;
+//                }
+
+                currentIndex = (currentIndex + 1) % question.length;
+                resetCheater();
+                updateQuestion();
+                            }
 
         });
+
+        cheatButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                //
+                Intent intent = CheatActivity.createIntent(QuizActivity.this, getCurrentAnswer());
+//                intent.putExtra("NAME", question[currentIndex].getAnswer());
+                startActivityForResult(intent, REQUEST_CHEATED);
+            }
+        });
+
+
+
         Log.d(TAG, "On Create");
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent dataInternt) {
+        if(resultCode != Activity.RESULT_OK){
+            return;
+        }
+
+        if(requestCode == REQUEST_CHEATED){
+            if (dataInternt == null){
+                return;
+            }
+        }
+         isCheater = CheatActivity.wasCheated(dataInternt);
+    }
+
+    private boolean getCurrentAnswer(){
+        return question[currentIndex].getAnswer();
+    }
+
+    private void resetCheater(){
+        isCheater = false;
+    }
     public void updateQuestion(){
         questionText.setText(question[currentIndex].getQuestionId());
     }
 
 
     public void checkAnswer(boolean answer){
+
         boolean correctAnswer = question[currentIndex].getAnswer();
 
-        int result = (answer == correctAnswer)? R.string.correct_text : R.string.incorrect_text;
+        int result;
+
+        if( isCheater){
+            result = R.string.cheater_text;
+        }else {
+            if(answer == correctAnswer){
+                result = R.string.correct_text;
+            }else {
+                result = R.string.incorrect_text;
+            }
+        }
+
         Toast.makeText(QuizActivity.this, result, Toast.LENGTH_SHORT) .show();
 
 //        int result;

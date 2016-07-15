@@ -7,9 +7,14 @@
     <string name="next_button">Next</string>
     <string name="previous_button">Previous</string>
 
-    <string name="question_1_text">1 The longest river in the world is Nile ?</string>
-    <string name="question_2_nile">2 Rawin is happy ?</string>
-    <string name="question_3_nile">3 2 + 2 = 5 ?</string>
-    <string name="question_4_nile">4 Mars does not have Moon ?</string>
+    <string name="question_1_text">1. The longest river in the world is Nile ?</string>
+    <string name="question_2_nile">2. Rawin is happy ?</string>
+    <string name="question_3_nile">3. 2 + 2 = 5 ?</string>
+    <string name="question_4_nile">4. Mars does not have Moon ?</string>
+    <string name="cheat_button">Cheat</string>
+    <string name="confirm_button">You really want to know the answer ?</string>
+    <string name="answer_is_true">Answer is TRUE!</string>
+    <string name="answer_is_false">Answer is FALSE</string>
+    <string name="cheater_text">You\'re CHEATER !</string>
 
 </resources>
