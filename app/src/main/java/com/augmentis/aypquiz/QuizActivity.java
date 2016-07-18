@@ -21,7 +21,7 @@ public class QuizActivity extends AppCompatActivity {
     Button cheatButton;
 
 
-    Question[] question = new Question[]{
+   static Question[] question = new Question[]{
             new Question(R.string.question_1_text, true),
             new Question(R.string.question_2_nile, true),
             new Question(R.string.question_3_nile, false),
@@ -116,19 +116,17 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                currentIndex++;
-                if(currentIndex == question.length) currentIndex = 0;
+//                currentIndex++;
+//                if(currentIndex == question.length) currentIndex = 0;
+
+                if(currentIndex < (question.length - 1)) { //This function is also work na ka
+                    currentIndex ++;
+                }else {
+                    currentIndex = 0;
+                }
 
                 resetCheater();
                 updateQuestion();
-
-//                if(currentIndex < (question.length - 1)) { //This function is also work na ka
-//                    currentIndex ++;
-//                }else {
-//                    currentIndex = 0;
-//                }
-//                questionText.setText(question[currentIndex].getQuestionId());
-
             }
         });
 
@@ -145,7 +143,7 @@ public class QuizActivity extends AppCompatActivity {
                 currentIndex = (currentIndex + 1) % question.length;
                 resetCheater();
                 updateQuestion();
-                            }
+            }
 
         });
 
@@ -176,6 +174,7 @@ public class QuizActivity extends AppCompatActivity {
                 return;
             }
         }
+        question[currentIndex].setCheckCheated(true);
          isCheater = CheatActivity.wasCheated(dataInternt);
     }
 
@@ -186,6 +185,7 @@ public class QuizActivity extends AppCompatActivity {
     private void resetCheater(){
         isCheater = false;
     }
+
     public void updateQuestion(){
         questionText.setText(question[currentIndex].getQuestionId());
     }
@@ -197,6 +197,9 @@ public class QuizActivity extends AppCompatActivity {
 
         int result;
 
+        if (getCheckCheater()) {
+            isCheater = getCheckCheater();
+        }
         if( isCheater){
             result = R.string.cheater_text;
         }else {
@@ -208,12 +211,11 @@ public class QuizActivity extends AppCompatActivity {
         }
 
         Toast.makeText(QuizActivity.this, result, Toast.LENGTH_SHORT) .show();
+        resetCheater();
+    }
 
-//        int result;
-//        if(answer == correctAnswer){  // This function is also work na ka
-//           result =  R.string.correct_text;
-//        }else
-//           result = R.string.incorrect_text;
+    private boolean getCheckCheater (){
+        return question[currentIndex].isCheckCheated();
     }
 
 }
